@@ -15,7 +15,7 @@ const Signup = () => {
   const signup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/users/saveUser", {
+      const response = await axios.post("https://chatterly-backend-14vz.onrender.com/users/saveUser", {
         name : name,
         email : email,
         password : password,

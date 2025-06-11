@@ -17,7 +17,7 @@ const ChatPage = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/chats/user/${sessionStorage.getItem("userId")}`);
+      const response = await axios.get(`https://chatterly-backend-14vz.onrender.com/chats/user/${sessionStorage.getItem("userId")}`);
 
       // Build the message list from user message and bot response
       const chatPairs = response.data.flatMap(msg => ([
@@ -67,7 +67,7 @@ const ChatPage = () => {
     }, 500); // adjust speed if needed
 
     try {
-      const response = await axios.post("http://localhost:8000/chats/message", {
+      const response = await axios.post("https://chatterly-backend-14vz.onrender.com/chats/message", {
         message: trimmedInput,
         user_id: sessionStorage.getItem("userId"),
       });
