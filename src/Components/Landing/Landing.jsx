@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from "../../Images/chatterlyIcon.png";
 import "./Landing.scss";
 import { toast } from 'react-toastify';
@@ -9,6 +10,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const chatBodyRef = useRef(null);
+const navigate = useNavigate();
 
   const fetchMessages = useCallback(async () => {
     try {
@@ -32,10 +34,17 @@ const ChatPage = () => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
+
   };
 
   const sendMessage = async () => {
     const trimmedInput = userInput.trim();
+  
+  if (!sessionStorage.getItem("userId")) {
+    toast.error("Please login");
+    navigate("/login");
+    return;
+  }
     if (!trimmedInput) return;
 
     const newUserMessage = { message: trimmedInput, user: true };
