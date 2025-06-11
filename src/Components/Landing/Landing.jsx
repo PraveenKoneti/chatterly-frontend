@@ -1,37 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import logo from "../../Images/chatterlyIcon.png";
 import "./Landing.scss";
 import { toast } from 'react-toastify';
 
-
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const chatBodyRef = useRef(null);
 
-  useEffect(() => {
-    fetchMessages();
-  }, [true]);
-
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     try {
       const response = await axios.get(`https://chatterly-backend-14vz.onrender.com/chats/user/${sessionStorage.getItem("userId")}`);
-
-      // Build the message list from user message and bot response
       const chatPairs = response.data.flatMap(msg => ([
-        { message: msg.message, user: true },     // User message
-        { message: msg.response, user: false }    // Bot response
+        { message: msg.message, user: true },
+        { message: msg.response, user: false }
       ]));
-
       setMessages(chatPairs);
       scrollToBottom();
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
-  };
+  }, []);
 
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
 
   const scrollToBottom = () => {
     if (chatBodyRef.current) {
@@ -48,11 +43,9 @@ const ChatPage = () => {
     setUserInput('');
     scrollToBottom();
 
-    // Add temporary bot message for animation
     const botLoadingMsg = { message: '.', user: false };
     setMessages(prev => [...prev, botLoadingMsg]);
 
-    // Animate dots: '.', '..', '...'
     let dotCount = 1;
     const loadingInterval = setInterval(() => {
       setMessages(prev => {
@@ -64,7 +57,7 @@ const ChatPage = () => {
 
       dotCount = dotCount < 3 ? dotCount + 1 : 1;
       scrollToBottom();
-    }, 500); // adjust speed if needed
+    }, 500);
 
     try {
       const response = await axios.post("https://chatterly-backend-14vz.onrender.com/chats/message", {
@@ -72,11 +65,10 @@ const ChatPage = () => {
         user_id: sessionStorage.getItem("userId"),
       });
 
-      clearInterval(loadingInterval); // stop dot animation
+      clearInterval(loadingInterval);
 
       if (response.data?.success !== false && response.data?.chat?.response) {
         const botResponse = response.data.chat.response;
-
         let botMessage = "";
         let index = 0;
 
@@ -101,7 +93,6 @@ const ChatPage = () => {
           return updated;
         });
       }
-
     } catch (error) {
       clearInterval(loadingInterval);
       console.error("Error sending message:", error);
@@ -119,7 +110,7 @@ const ChatPage = () => {
       {/* Sidebar */}
       <div className="col-md-3 d-none d-md-flex flex-column sidebar vh-100">
         <div className="p-0">
-          <img src={logo} width="60" height="60" alt="Logo" />
+          <img src={logo} width="60" height="60" alt="Chatterly Logo" />
           <b className="text-white fs-3"> Chatterly </b>
         </div>
         <hr className="text-white" size="16" />
@@ -138,10 +129,10 @@ const ChatPage = () => {
         {/* Navbar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-light rounded-top shadow-sm mb-2">
           <div className="container-fluid">
-            <a class="navbar-brand text-dark p-0 m-0" href="#">
-              <img src={logo} width="50" height="50" class="m-0 p-0" />
-              <b class="fs-5 ms-0"> Chatterly </b>
-            </a>
+            <button className="navbar-brand text-dark p-0 m-0 btn btn-link">
+              <img src={logo} width="50" height="50" alt="Chatterly Logo" className="m-0 p-0" />
+              <b className="fs-5 ms-0"> Chatterly </b>
+            </button>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -150,7 +141,7 @@ const ChatPage = () => {
                 {sessionStorage.getItem("userId") ? (
                   <>
                     <li className="nav-item me-3 text-dark fw-bold fs-5 align-items-center d-flex">
-                      Welcome, <b className='text-primary ms-1'>  {sessionStorage.getItem("userName")} </b>
+                      Welcome, <b className='text-primary ms-1'>{sessionStorage.getItem("userName")}</b>
                     </li>
                     <li className="nav-item">
                       <Link
@@ -180,7 +171,6 @@ const ChatPage = () => {
                   </>
                 )}
               </ul>
-
             </div>
           </div>
         </nav>
