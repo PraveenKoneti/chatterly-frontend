@@ -21,7 +21,7 @@ const Signup = () => {
         password : password,
       });
 
-      console.log(response,"response");
+      console.log("response = ",response);
 
       if (response.data.success) {
         setName("");
@@ -30,11 +30,11 @@ const Signup = () => {
         toast.success("Account Created Successfully")
         navigate("/login");
       } else {
-        toast.error("Unable to create the account")
+        toast.error(response?.data?.detail || "Unable to create the account")
       }
     } catch (error) {
       console.error("Manual signup error:", error);
-      toast.error("Unable to create the account")
+      toast.error(error.response.data.detail || "Unable to create the account")
     }
   };
 

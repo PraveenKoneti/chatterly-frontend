@@ -124,7 +124,7 @@ const navigate = useNavigate();
         </div>
         <hr className="text-white" size="16" />
         <h5 className="text-light text-center">Today's Searches</h5>
-        <ul className="list-group overflow-auto border-0">
+        <ul className="list-group overflow-auto border-0 rounded-0">
           {messages.slice().reverse().filter(msg => msg.user).map((search, index) => (
             <li key={index} className="list-group-item text-white text-start border-0 border-bottom">
               <i className="bi bi-search text-warning me-1"></i> {search.message}
@@ -134,7 +134,7 @@ const navigate = useNavigate();
       </div>
 
       {/* Chat Box */}
-      <div className="col-12 col-md-9 m-auto">
+      <div className="col-12 col-md-9 border">
         {/* Navbar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-light rounded-top shadow-sm mb-2">
           <div className="container-fluid">
