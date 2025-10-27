@@ -14,7 +14,7 @@ const navigate = useNavigate();
 
   const fetchMessages = useCallback(async () => {
     try {
-      const response = await axios.get(`https://chatterly-backend-14vz.onrender.com/chats/user/${sessionStorage.getItem("userId")}`);
+      const response = await axios.get(`https://backend-chatterly.onrender.com/chats/user/${sessionStorage.getItem("userId")}`);
       const chatPairs = response.data.flatMap(msg => ([
         { message: msg.message, user: true },
         { message: msg.response, user: false }
@@ -69,7 +69,7 @@ const navigate = useNavigate();
     }, 500);
 
     try {
-      const response = await axios.post("https://chatterly-backend-14vz.onrender.com/chats/message", {
+      const response = await axios.post("https://backend-chatterly.onrender.com/chats/message", {
         message: trimmedInput,
         user_id: sessionStorage.getItem("userId"),
       });

@@ -16,7 +16,7 @@ const handleLogin = async (e) => {
 
   try {
     const response = await axios.post(
-      'https://chatterly-backend-14vz.onrender.com/users/login',
+      'https://backend-chatterly.onrender.com/users/login',
       {
         email : email,
         password : password,
